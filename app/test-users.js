@@ -129,6 +129,7 @@ function getAppInfo(token) {
     access.app_name = response.name;
     access.token = token;
     save('_app_access', access);
+    getTestUsers();
   }).fail(onAccessFail);
 }
 
