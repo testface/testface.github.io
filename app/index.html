@@ -58,8 +58,8 @@
         </form>
       </template>
     </div>
-    <div class="overlay" id="overlay" v-cloak v-show="dialog.open">
-      <div class="dialog">
+    <div class="overlay" id="overlay" v-cloak v-on:click="close" v-show="dialog.open">
+      <div class="dialog" v-on:click.stop>
         <div class="title">
           <h4> {{ dialog.title }} </h4>
           <button v-on:click="close"><i class="fa fa-close"></i></button>

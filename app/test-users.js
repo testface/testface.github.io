@@ -12,12 +12,12 @@ var dialog = {
 
 var access;
 try {
-  access = loadAccess();
+  access = load('_app_access');
 } catch(e) {
 }
 
 if(!access) {
-  clearAccess();
+  clear('_app_access');
 }
 
 if(access.token) {
@@ -28,28 +28,37 @@ if(access.token) {
   });
 }
 
-function saveAccess() {
+var savedEmails;
+try {
+  savedEmails = load('_saved_emails');
+} catch(e) {
+}
+if(!savedEmails) {
+  savedEmails = {};
+}
+
+function save(key, value) {
   if(window.location.protocol == 'https:') {
-    document.cookie = "_app_access=" + JSON.stringify(access) + ';secure';
+    document.cookie = key + '=' + JSON.stringify(value) + ';secure';
   } else {
-    sessionStorage.setItem('_app_access', JSON.stringify(access));
+    sessionStorage.setItem(key, JSON.stringify(value));
   }
 }
 
-function loadAccess() {
+function load(key) {
   if(window.location.protocol == 'https:') {
     var cookies = {};
     $.each(document.cookie.split(/\s+/), function(i, c) {
       var j = c.indexOf('=');
       cookies[c.substr(0, j)] = c.substr(j+1);
     });
-    return JSON.parse(cookies._app_access);
+    return JSON.parse(cookies[key]);
   } else {
-    return JSON.parse(sessionStorage.getItem('_app_access'));
+    return JSON.parse(sessionStorage.getItem(key));
   }
 }
 
-function clearAccess() {
+function clear(key) {
   if(!access)
     access = {}
 
@@ -60,9 +69,9 @@ function clearAccess() {
   access.message = null;
 
   if(window.location.protocol == 'https:') {
-    document.cookie = '_app_access=';
+    document.cookie = key + '=';
   } else {
-    sessionStorage.setItem('_app_access', JSON.stringify(access));
+    sessionStorage.setItem(key, JSON.stringify(access));
   }
 }
 
@@ -90,6 +99,13 @@ function getUserInfo(users) {
       user.name = response[user.id].name;
       user.email = response[user.id].email;
       userList.push(user);
+
+      if(user.email) {
+        delete savedEmails[user.id];
+        save('_saved_emails', savedEmails);
+      } else {
+        user.email = savedEmails[user.id];
+      }
     });
   });
 }
@@ -112,7 +128,7 @@ function getAppInfo(token) {
   }).done(function(response) {
     access.app_name = response.name;
     access.token = token;
-    saveAccess();
+    save('_app_access', access);
   }).fail(onAccessFail);
 }
 
@@ -124,11 +140,13 @@ function confirmDialog(props, cb) {
   dialog.value = '';
   dialog.cb = cb;
 
+  $('body').css('overflow', 'hidden');
+
   setTimeout(function() {
-    if($('input:visible').val()) {
-      $('input:visible').select();
+    if($('.dialog input:visible').val()) {
+      $('.dialog input:visible').select();
     } else {
-      $('input:visible').focus();
+      $('.dialog input:visible').focus();
     }
   });
 }
@@ -140,6 +158,8 @@ function closeDialog() {
   dialog.name = null;
   dialog.submitted = false;
   dialog.cb = null;
+
+  $('body').css('overflow', 'auto');
 }
 
 function setPassword(user, password) {
@@ -208,6 +228,9 @@ function addUser(name) {
 
     userList.push(user);
 
+    savedEmails[user.id] = user.email;
+    save('_saved_emails', savedEmails);
+
   }).fail(function(response) {
     dialog.message = response.responseJSON.error.message;
     dialog.submitted = false;
@@ -225,7 +248,7 @@ new Vue({
   methods: {
     authorize: getToken,
     disconnect: function() {
-      confirmDialog("Really sign out?", clearAccess);
+      confirmDialog("Really sign out?", function() { clear('_app_access') });
     },
     select: function(e) {
       e.target.select();
