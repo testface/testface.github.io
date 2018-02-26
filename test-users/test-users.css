@@ -161,13 +161,21 @@ button:disabled {
   vertical-align: top;
 }
 .name {
-  width: 240px;
+  width: 120px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 .email {
-  width: calc(100% - 240px - 100px);
+  width: calc(100% - 120px - 100px);
+}
+@media(min-width: 768px) {
+  .name {
+    width: 240px;
+  }
+  .email {
+    width: calc(100% - 240px - 100px);
+  }
 }
 .actions {
   width: 80px;

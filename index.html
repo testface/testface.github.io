@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>TestFace</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link href='https://fonts.googleapis.com/css?family=Baumans|Open+Sans' rel='stylesheet' type='text/css'>
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel='icon' href='favicon.ico'>
@@ -14,7 +15,15 @@
         width: 100%;
         max-width: 960px;
         margin: 0 auto;
-        padding: 60px 0;
+        padding: 60px 0 20px;
+      }
+      .title:after {
+        content: '';
+        display: block;
+        width: calc(100% - 90px);
+        margin-top: 20px;
+        margin-left: 80px;
+        border-bottom: 2px solid darkgoldenrod;
       }
       .content{
         width: 100%;
