@@ -29,7 +29,7 @@ if(access.token) {
 }
 
 function saveAccess() {
-  if(window.scheme.protocol == 'https:') {
+  if(window.location.protocol == 'https:') {
     document.cookie = "_app_access=" + JSON.stringify(access) + ';secure';
   } else {
     sessionStorage.setItem('_app_access', JSON.stringify(access));
@@ -37,7 +37,7 @@ function saveAccess() {
 }
 
 function loadAccess() {
-  if(window.scheme.protocol == 'https:') {
+  if(window.location.protocol == 'https:') {
     var cookies = {};
     $.each(document.cookie.split(/\s+/), function(i, c) {
       var j = c.indexOf('=');
@@ -59,7 +59,7 @@ function clearAccess() {
   access.token = null;
   access.message = null;
 
-  if(window.scheme.protocol == 'https:') {
+  if(window.location.protocol == 'https:') {
     document.cookie = '_app_access=';
   } else {
     sessionStorage.setItem('_app_access', JSON.stringify(access));
@@ -95,7 +95,7 @@ function getUserInfo(users) {
 }
 
 function getToken() {
-  delete access.message;
+  access.message = '';
 
   $.getJSON('https://graph.facebook.com/oauth/access_token', {
     client_id: this.access.client_id,
