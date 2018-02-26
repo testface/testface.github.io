@@ -48,7 +48,7 @@ function save(key, value) {
 function load(key) {
   if(window.location.protocol == 'https:') {
     var cookies = {};
-    $.each(document.cookie.split(/\s+/), function(i, c) {
+    $.each(document.cookie.split(/;\s+/), function(i, c) {
       var j = c.indexOf('=');
       cookies[c.substr(0, j)] = c.substr(j+1);
     });
