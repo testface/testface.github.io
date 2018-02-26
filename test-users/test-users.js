@@ -144,11 +144,7 @@ function confirmDialog(props, cb) {
   $('body').css('overflow', 'hidden');
 
   setTimeout(function() {
-    if($('.dialog input:visible').val()) {
-      $('.dialog input:visible').select();
-    } else {
-      $('.dialog input:visible').focus();
-    }
+    $('.dialog input:visible').focus();
   });
 }
 
@@ -220,17 +216,34 @@ function addUser(name) {
   }).done(function(response) {
     var user = response;
     user.name = name;
+
+    if(!name) {
+      $.getJSON('https://graph.facebook.com/' + user.id, {
+        access_token: access.token
+      }, function(response) {
+        user.name = response.name;
+      });
+    }
+
     dialog.value = user.password;
-    dialog.label = 'Choose a password';
+    dialog.label = 'Change the default password';
     dialog.name = 'New password';
     dialog.cb = function() {
-      setPassword(user, dialog.value);
+      if(dialog.value == user.password || !dialog.value) {
+        dialog.success = 'Kept default password';
+      } else {
+        setPassword(user, dialog.value);
+      }
     };
 
     userList.push(user);
 
     savedEmails[user.id] = user.email;
     save('_saved_emails', savedEmails);
+
+    setTimeout(function() {
+      $('.dialog input:visible').select();
+    });
 
   }).fail(function(response) {
     dialog.message = response.responseJSON.error.message;

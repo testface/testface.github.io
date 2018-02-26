@@ -121,10 +121,18 @@ ul {
   background: #eee
 }
 
-.container li:not(.header) .email {
-  font-family: courier;
+.container li:not(.header) .email .missing {
+  font-style: italic;
+  color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 100%;
+  cursor: help;
 }
 .container li:not(.header) .email input {
+  font-family: courier;
   background: none;
   border: 0;
   cursor: pointer;
