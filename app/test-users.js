@@ -251,6 +251,7 @@ new Vue({
     disconnect: function() {
       confirmDialog({title: 'Disconnect', label: "Really sign out?"}, function() {
         clear('_app_access')
+        userList = [];
         closeDialog();
       });
     },
