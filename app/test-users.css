@@ -1,0 +1,248 @@
+body {
+  font-family: sans;
+  margin: 0;
+}
+
+.container {
+  max-width: 940px;
+  margin: 0 auto 120px;
+}
+.app-info {
+  padding: 8px 20px;
+  color: white;
+  background: #444;
+}
+.app-info h4, .app-info button {
+  display: inline-block 
+}
+.app-info h4 {
+  width: calc(100% - 90px)
+}
+.app-info button.disconnect {
+  background: none;
+}
+
+.new-user {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.new-user .actions {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  background: #444;
+  max-width: 940px;
+  width: 100%;
+  height: 24px;
+}
+.new-user .button-wrapper {
+  position: absolute;
+  right: 10px;
+  bottom: 4px;
+  background: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+}
+.new-user .add {
+  margin: 4px;
+  border-radius: 50%;
+  background: darkgreen;
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+}
+
+h1 {
+  background: #3B5998;
+  color: white;
+  margin: 0;
+  padding: 40px 20px;
+}
+
+h4 {
+  margin: 6px 0;
+}
+
+.container form {
+  width: 560px;
+  margin: 120px auto;
+}
+.container form label {
+  width: 120px;
+  display: inline-block;
+  text-align: right;
+  font-style: italic;
+  color: #777;
+}
+.container form input {
+  font-size: 18px;
+  padding: 2px 20px;
+  margin: 4px 12px;
+  width: 400px;
+}
+.container form button {
+  margin: 4px 12px 4px 138px;
+  font-size: 18px;
+  color: white;
+  background: #444;
+  padding: 4px 20px;
+}
+.container form .error-message {
+  margin: 4px 12px 4px 138px;
+}
+
+.error-message {
+  color: red;
+  word-break: break-all;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.container li.header {
+  font-weight: bold;
+  padding: 16px 20px;
+  background: #ddd
+}
+
+.container li:not(.header) {
+  padding: 8px 20px;
+}
+.container li:not(.header):nth-child(odd) {
+  background: #eee
+}
+
+.container li:not(.header) .email {
+  font-family: courier;
+}
+
+button {
+  color: white;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+button:not(:hover):not(:disabled) {
+  opacity: 0.6;
+}
+button i.fa {
+  color: white;
+}
+button.delete {
+  background: darkred;
+}
+button.unlock {
+  background: #3B5998;
+}
+button:disabled {
+  background: #ddd !important;
+  cursor: default;  
+}
+
+.name, .email, .actions {
+  display: inline-block;
+}
+.name {
+  width: 240px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.email {
+  width: calc(100% - 240px - 100px);
+}
+.actions {
+  width: 80px;
+  text-align: right;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+}
+[v-cloak] {
+  display: none;
+}
+.dialog {
+  background: white;
+  box-shadow: 1px 1px 2px #777;
+  width: 300px;
+  padding: 12px 20px;
+  margin: 200px auto;
+}
+
+.dialog .title h4, .dialog .title button {
+  display: inline-block
+}
+.dialog .title h4 {
+  width: calc(100% - 34px);
+}
+.dialog .title button {
+  background: none;
+}
+.dialog .title button i {
+  color: black;
+}
+.dialog .title {
+  margin-bottom: 12px;
+}
+
+.dialog .label {
+  margin: 18px 0;
+  font-style: italic;
+  border-bottom: 1px solid #aaa;
+}
+
+.dialog input {
+  width: 100%;
+  padding: 2px 20px;
+  margin: 20px 0;
+}
+
+.dialog .success {
+  font-size: 18px;
+  color: green;
+  padding: 12px 6px;
+  text-align: right;
+}
+.dialog .success i.fa {
+  font-size: 12px;
+  color: green;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  border: 1px solid green;
+  border-radius: 50%;
+}
+.dialog .success li {
+  font-size: 14px;
+}
+
+.dialog .error-message {
+  margin: 12px 0;
+}
+
+.dialog .confirm {
+  margin: 12px 0;
+  text-align: right
+}
+
+.dialog .confirm button {
+  background: #444;
+  padding: 4px 20px;
+}

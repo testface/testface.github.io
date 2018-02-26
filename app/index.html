@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="test-users.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container" id="app">
+      <h1> Test Users </h1>
+      <template v-if="access.token">
+        <div class="app-info">
+          <h4> {{ access.app_name }} </h4>
+          <button class="disconnect" v-on:click="disconnect">
+            Sign Out
+            <i class="fa fa-sign-out"></i>
+          </button>
+        </div>
+        <ul>
+          <li class="header">
+            <div class="name"> Name </div>
+            <div class="email"> Email </div>
+            <div class="actions"> Actions </div>
+          </li>
+          <li v-for="user in users">
+            <div class="name"> {{ user.name }} </div>
+            <div class="email"> {{ user.email }} </div>
+            <div class="actions">
+              <button class="unlock" title="Set password" v-on:click="unlock(user)"><i class="fa fa-unlock-alt"></i></button>
+              <button class="delete" title="Delete" v-on:click="remove(user)"><i class="fa fa-trash"></i></button>
+            </div>
+          </li>
+        </ul>
+
+        <div class="new-user">
+          <div class="actions">
+            <div class="button-wrapper">
+              <button class="add" title="Add user" v-on:click="add"><i class="fa fa-user-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <form v-on:submit.prevent="authorize">
+          <h4> Facebook App Info: </h4>
+          <div>
+            <label>Client ID</label>
+            <input type="text" v-model="access.client_id"></input>
+          </div>
+          <div>
+            <label>Client Secret</label>
+            <input type="password" v-model="access.client_secret"></input>
+          </div>
+          <div class="error-message" v-if="access.message">
+            {{ access.message }}
+          </div>
+          <div>
+            <button>Authorize</button>
+          </div>
+        </form>
+      </template>
+    </div>
+    <div class="overlay" id="overlay" v-cloak v-show="dialog.open">
+      <div class="dialog">
+        <div class="title">
+          <h4> {{ dialog.title }} </h4>
+          <button v-on:click="close"><i class="fa fa-close"></i></button>
+        </div>
+
+        <div class="label">
+          {{ dialog.label }}
+        </div>
+
+        <template v-if="dialog.success">
+          <div class="success">
+            <i class="fa fa-check"></i>
+            {{ dialog.success }}
+
+            <ul>
+              <li v-for="step in dialog.steps">
+                {{ step }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template v-else>
+          <form v-on:submit.prevent="yes">
+            <div class="input" v-if="dialog.name">
+              <input v-bind:type="dialog.type" v-model="dialog.value" v-bind:placeholder="dialog.name"></input>
+            </div>
+
+            <div class="error-message" v-if="dialog.message">
+              {{ dialog.message }}
+            </div>
+
+            <div class="confirm">
+              <button v-bind:disabled="dialog.submitted"><i class="fa fa-check"></i> Continue</button>
+            </div>
+          </form>
+        </template>
+        
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <script src="test-users.js"> </script>
+  </body>
+</html>
