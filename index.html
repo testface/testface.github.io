@@ -6,26 +6,61 @@
     <style>
       body{ font-family: 'Open Sans'; }
       a { text-decoration: none; color: black; }
-      .title{ font-family: 'Baumans'; font-size: 2.2em; font-weight: bold; padding: 20px; }
-      .content{ width: 100%; padding: 20px; }
-      .list{ font-size: 1.6em; width: 45%; }
-      .list .link{ font-size: 0.8em; color: gray; background-color: #eee; cursor: pointer; padding: 20px; margin-top: 10px; border: solid thin lightgray; }
-      .list .link:hover{ color: black; background-color: #ddd }
+      .title{
+        font-family: 'Baumans';
+        font-size: 2.2em;
+        font-weight: bold;
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 60px 0;
+      }
+      .content{
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 0;
+        position: relative;
+      }
+      .link{
+        font-size: 0.8em;
+        cursor: pointer;
+        margin-top: 10px;
+        border: solid thin lightgray;
+      }
+      .link:not(:hover) {
+        opacity: 0.8;
+      }
+
+      .link.test-users  {
+        padding: 8px;
+        border: 2px solid #385998;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 40px 270px;
+      }
+      .link.test-users .inner {
+        color: white;
+        background-color: #385998;
+        font-size: 24px;
+        line-height: 144px;
+        text-align: center;
+        border-radius: 50%;
+        width: 144px;
+        height: 144px;
+      }
     </style>
   </head>
   <body>
     <div class='title'>
-      TestFace
+      Test ;\ Face
     </div>
     <div class='content'>
-      <div class='list'>
-        Available Applications
-        <a href='app'>
-          <div class='link'>
-            App - Test Users
-          </div>
-        </a>
-      </div>
+      <a class="link test-users" href='test-users'>
+        <div class="inner">
+          Test Users
+        </div>
+      </a>
     </div>
   </body>
 </html>
