@@ -249,7 +249,7 @@ new Vue({
   methods: {
     authorize: getToken,
     disconnect: function() {
-      confirmDialog("Really sign out?", function() { clear('_app_access') });
+      confirmDialog({title: 'Disconnect', label: "Really sign out?"}, function() { clear('_app_access') });
     },
     select: function(e) {
       e.target.select();
