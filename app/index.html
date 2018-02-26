@@ -22,7 +22,7 @@
           </li>
           <li v-for="user in users">
             <div class="name"> {{ user.name }} </div>
-            <div class="email"> {{ user.email }} </div>
+            <div class="email"> <input readonly v-on:click="select" v-model="user.email"></input></div>
             <div class="actions">
               <button class="unlock" title="Set password" v-on:click="unlock(user)"><i class="fa fa-unlock-alt"></i></button>
               <button class="delete" title="Delete" v-on:click="remove(user)"><i class="fa fa-trash"></i></button>

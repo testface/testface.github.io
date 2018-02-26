@@ -5,7 +5,6 @@ var dialog = {
   label: null,
   name: null,
   value: null,
-  info: null,
   success: null,
   message: null,
   submitted: false
@@ -23,6 +22,31 @@ if(!access) {
 
 if(access.token) {
   getTestUsers();
+} else {
+  $(function() {
+    setTimeout(function() { $('input:visible')[0].focus(); });
+  });
+}
+
+function saveAccess() {
+  if(window.scheme.protocol == 'https:') {
+    document.cookie = "_app_access=" + JSON.stringify(access) + ';secure';
+  } else {
+    sessionStorage.setItem('_app_access', JSON.stringify(access));
+  }
+}
+
+function loadAccess() {
+  if(window.scheme.protocol == 'https:') {
+    var cookies = {};
+    $.each(document.cookie.split(/\s+/), function(i, c) {
+      var j = c.indexOf('=');
+      cookies[c.substr(0, j)] = c.substr(j+1);
+    });
+    return JSON.parse(cookies._app_access);
+  } else {
+    return JSON.parse(sessionStorage.getItem('_app_access'));
+  }
 }
 
 function clearAccess() {
@@ -34,7 +58,12 @@ function clearAccess() {
   access.client_secret = null;
   access.token = null;
   access.message = null;
-  sessionStorage.setItem('_app_access', JSON.stringify(access));
+
+  if(window.scheme.protocol == 'https:') {
+    document.cookie = '_app_access=';
+  } else {
+    sessionStorage.setItem('_app_access', JSON.stringify(access));
+  }
 }
 
 function onAccessFail(error) {
@@ -91,18 +120,23 @@ function confirmDialog(props, cb) {
   dialog.open = true;
   dialog.title = props.title;
   dialog.label = props.label;
-  dialog.type = props.type;
   dialog.name = props.name;
-  dialog.info = null;
   dialog.value = '';
   dialog.cb = cb;
+
+  setTimeout(function() {
+    if($('input:visible').val()) {
+      $('input:visible').select();
+    } else {
+      $('input:visible').focus();
+    }
+  });
 }
 
 function closeDialog() {
   dialog.open = false;
   dialog.success = null;
   dialog.message = null;
-  dialog.info = null;
   dialog.name = null;
   dialog.submitted = false;
   dialog.cb = null;
@@ -153,46 +187,31 @@ function deleteUser(user) {
   });
 }
 
-function addUser(password) {
+function addUser(name) {
   dialog.submitted = true;
   $.ajax({
     method: 'POST',
     url: 'https://graph.facebook.com/' + access.client_id + '/accounts/test-users', 
     data: {
-      access_token: access.token
+      access_token: access.token,
+      name: name
     }
   }).done(function(response) {
     var user = response;
-
-    dialog.info = user.email;
+    user.name = name;
     dialog.value = user.password;
     dialog.label = 'Choose a password';
     dialog.name = 'New password';
-    dialog.type = 'password';
     dialog.cb = function() {
-      dialog.submitted = true;
-      $.ajax({
-        method: 'POST',
-        url: 'https://graph.facebook.com/' + user.id,
-        data: {
-          password: dialog.value,
-          access_token: access.token
-        }
-      }).done(function(response) {
-        if(response.success) {
-        }
-      }).fail(function(response) {
-        dialog.message = response.responseJSON.error.message;
-        dialog.submitted = false;
-      }).always(function() {
-        dialog.submitted = false;
-      });
+      setPassword(user, dialog.value);
     };
 
     userList.push(user);
 
   }).fail(function(response) {
     dialog.message = response.responseJSON.error.message;
+    dialog.submitted = false;
+  }).always(function() {
     dialog.submitted = false;
   });
 }
@@ -208,18 +227,17 @@ new Vue({
     disconnect: function() {
       confirmDialog("Really sign out?", clearAccess);
     },
+    select: function(e) {
+      e.target.select();
+    },
     unlock: function(user) {
-      confirmDialog({title: "Set Password", label: "Password for " + user.name, name: 'New password', type: 'password' }, function() { setPassword(user, dialog.value) });
-
-      setTimeout(function() {
-        $('input:visible').focus();
-      });
+      confirmDialog({title: "Set Password", label: "Password for " + user.name, name: 'New password' }, function() { setPassword(user, dialog.value) });
     },
     remove: function(user) {
       confirmDialog({title: "Delete User", label: "Really delete " + user.name + "?" }, function() { deleteUser(user) });
     },
     add: function() {
-      confirmDialog({title: "Create User", label: "Pick a name for the test user", name: 'Name', type: 'text' }, function() { addUser(dialog.value) });
+      confirmDialog({title: "Create User", label: "Pick a name for the test user", name: 'Name' }, function() { addUser(dialog.value) });
     }
   }
 });

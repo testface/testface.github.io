@@ -123,6 +123,13 @@ ul {
 .container li:not(.header) .email {
   font-family: courier;
 }
+.container li:not(.header) .email input {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
 
 button {
   color: white;
@@ -151,6 +158,7 @@ button:disabled {
 
 .name, .email, .actions {
   display: inline-block;
+  vertical-align: top;
 }
 .name {
   width: 240px;
@@ -183,13 +191,14 @@ button:disabled {
   width: 300px;
   padding: 12px 20px;
   margin: 200px auto;
+  border-radius: 4px;
 }
 
 .dialog .title h4, .dialog .title button {
   display: inline-block
 }
 .dialog .title h4 {
-  width: calc(100% - 34px);
+  width: calc(100% - 24px);
 }
 .dialog .title button {
   background: none;
@@ -199,6 +208,7 @@ button:disabled {
 }
 .dialog .title {
   margin-bottom: 12px;
+  white-space: nowrap;
 }
 
 .dialog .label {
