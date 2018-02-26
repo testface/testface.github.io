@@ -12,7 +12,7 @@ var dialog = {
 
 var access;
 try {
-  access = JSON.parse(sessionStorage.getItem('_app_access'));
+  access = loadAccess();
 } catch(e) {
 }
 
@@ -112,7 +112,7 @@ function getAppInfo(token) {
   }).done(function(response) {
     access.app_name = response.name;
     access.token = token;
-    sessionStorage.setItem('_app_access', JSON.stringify(access));
+    saveAccess();
   }).fail(onAccessFail);
 }
 
