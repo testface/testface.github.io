@@ -211,7 +211,8 @@ function addUser(name) {
     url: 'https://graph.facebook.com/' + access.client_id + '/accounts/test-users', 
     data: {
       access_token: access.token,
-      name: name
+      name: name,
+      permissions: 'email'
     }
   }).done(function(response) {
     var user = response;
