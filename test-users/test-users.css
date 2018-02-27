@@ -88,31 +88,45 @@ h4 {
 }
 
 .container form {
-  width: 560px;
+  width: 90%;
+  max-width: 560px;
   margin: 120px auto;
 }
+.container form label, .container form button {
+  width: 100%;
+}
+.container form input, .container form button {
+  font-size: 18px;
+  margin: 4px 0;
+}
 .container form label {
-  width: 120px;
+  max-width: 120px;
   display: inline-block;
-  text-align: right;
   font-style: italic;
   color: #777;
 }
 .container form input {
-  font-size: 18px;
+  max-width: 400px;
   padding: 2px 20px;
-  margin: 4px 12px;
-  width: 400px;
 }
 .container form button {
-  margin: 4px 12px 4px 138px;
-  font-size: 18px;
   color: white;
   background: #444;
   padding: 4px 20px;
 }
 .container form .error-message {
-  margin: 4px 12px 4px 138px;
+  margin: 4px 0;
+}
+@media (min-width: 768px) {
+  .container form label {
+    text-align: right;
+  }
+  .container form input {
+    margin: 4px 12px;
+  }
+  .container form button, .container form .error-message {
+    margin: 4px 12px 4px 138px;
+  }
 }
 
 .info {
