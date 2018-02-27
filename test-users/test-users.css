@@ -13,7 +13,7 @@ body {
   background: #444;
 }
 .app-info h4, .app-info button {
-  display: inline-block 
+  display: inline-block
 }
 .app-info h4 {
   width: calc(100% - 90px)
@@ -63,6 +63,24 @@ h1 {
   color: white;
   margin: 0;
   padding: 40px 20px;
+  position: relative;
+  font-size: 24px;
+}
+@media(min-width: 768px) {
+  h1 {
+    font-size: 32px;
+  }
+}
+
+h1 a {
+  text-decoration: none;
+  color: #eee;
+}
+h1 .app {
+  position: absolute;
+  right: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
 }
 
 h4 {
@@ -97,6 +115,14 @@ h4 {
   margin: 4px 12px 4px 138px;
 }
 
+.info {
+  margin: 60px 0;
+  color: #777;
+}
+.info small {
+  font-style: italic;
+}
+
 .error-message {
   color: red;
   word-break: break-all;
@@ -110,13 +136,22 @@ ul {
 
 .container li.header {
   font-weight: bold;
-  padding: 16px 20px;
+  padding: 16px 8px;
   background: #ddd
 }
 
 .container li:not(.header) {
-  padding: 8px 20px;
+  padding: 8px 8px;
 }
+@media (min-width: 768px) {
+  .container li.header {
+    padding: 8px 20px;
+  }
+  .container li:not(.header) {
+    padding: 8px 20px;
+  }
+}
+
 .container li:not(.header):nth-child(odd) {
   background: #eee
 }
@@ -162,7 +197,7 @@ button.unlock {
 }
 button:disabled {
   background: #ddd !important;
-  cursor: default;  
+  cursor: default;
 }
 
 .name, .email, .actions {
@@ -202,13 +237,21 @@ button:disabled {
 [v-cloak] {
   display: none;
 }
+
 .dialog {
   background: white;
   box-shadow: 1px 1px 2px #777;
-  width: 300px;
+  width: 90%;
+  max-width: 340px;
+  margin: 100px auto;
   padding: 12px 20px;
-  margin: 200px auto;
+  box-sizing: border-box;
   border-radius: 4px;
+}
+@media (min-height: 512px) {
+  .dialog {
+    margin: 200px auto;
+  }
 }
 
 .dialog .title h4, .dialog .title button {

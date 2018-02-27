@@ -6,12 +6,16 @@
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel='icon' href='favicon.ico'>
     <style>
-      body{ font-family: 'Open Sans'; }
+      body { font-family: 'Open Sans'; }
       a { text-decoration: none; color: black; }
-      .title{
+      html, body {
+        margin: 0;
+      }
+      .title {
         font-family: 'Baumans';
         font-size: 2.2em;
         font-weight: bold;
+        color: #444;
         width: 100%;
         max-width: 960px;
         margin: 0 auto;
@@ -25,14 +29,22 @@
         margin-left: 80px;
         border-bottom: 2px solid darkgoldenrod;
       }
-      .content{
+      .content {
         width: 100%;
         max-width: 960px;
         margin: 0 auto;
         padding: 40px 0;
+        box-sizing: border-box;
         position: relative;
       }
-      .link{
+      .info {
+        font-style: italic;
+        font-size: 12px;
+        color: #777;
+        width: 160px;
+        margin-left: 32px;
+      }
+      .link {
         font-size: 0.8em;
         cursor: pointer;
         margin-top: 10px;
@@ -42,16 +54,19 @@
         opacity: 0.8;
       }
 
-      .link.test-users  {
+      .test-users  {
+        position: relative;
+        left: calc(70% - 200px);
+        width: 200px;
+      }
+      .test-users .link  {
         padding: 8px;
         border: 2px solid #385998;
         border-radius: 50%;
         display: inline-block;
         margin: 20px;
-        position: relative;
-        left: calc(70% - 200px);
       }
-      .link.test-users .inner {
+      .test-users .link .inner {
         color: white;
         background-color: #385998;
         font-size: 24px;
@@ -68,11 +83,16 @@
       Test ;\ Face
     </div>
     <div class='content'>
-      <a class="link test-users" href='test-users'>
-        <div class="inner">
-          Test Users
+      <div class='app test-users'>
+        <a class="link" href='test-users'>
+          <div class="inner">
+            Test Users
+          </div>
+        </a>
+        <div class="info">
+          Manage test users for a Facebook app.
         </div>
-      </a>
+      </div>
     </div>
   </body>
 </html>

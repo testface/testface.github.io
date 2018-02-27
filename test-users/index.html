@@ -9,7 +9,10 @@
   </head>
   <body>
     <div class="container" id="app">
-      <h1> Test Users </h1>
+      <h1>
+        <a href="..">Test ;\ Face</a>
+        <span class="app"> Test Users </span>
+      </h1>
       <template v-if="access.token">
         <div class="app-info">
           <h4> {{ access.app_name }} </h4>
@@ -28,7 +31,7 @@
             <div class="name"> {{ user.name }} </div>
             <div class="email">
               <input readonly v-if="user.email" v-on:click="select" v-model="user.email"></input>
-              <span class="missing" v-else title="Email addresses are only available after the user logs in to the app"> 
+              <span class="missing" v-else title="Email addresses are only available after the user logs in to the app">
                 &mdash; email not available &mdash;
               </span>
             </div>
@@ -63,6 +66,16 @@
           </div>
           <div>
             <button>Authorize</button>
+          </div>
+
+          <div class="info">
+            <p> Security note: </p>
+            <p> <small> Your Facebook app credentials will be converted into a Facebook app token,
+              which will in turn be used to make calls on behalf of the app using the Graph API. </small> </p>
+            <p> <small> All API calls are made in-browser with ajax, and are not sent anywhere other than directly to
+              Facebook. </small> </p>
+            <p> <small> Certain data, including the app token, are saved in cookie specific to the subdomain with
+              the secure flag set. </small> </p>
           </div>
 
         </form>
@@ -106,7 +119,7 @@
             </div>
           </form>
         </template>
-        
+
       </div>
     </div>
 
