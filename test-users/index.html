@@ -31,7 +31,7 @@
             <div class="name"> {{ user.name }} </div>
             <div class="email">
               <input readonly v-if="user.email" v-on:click="select" v-model="user.email"></input>
-              <span class="missing" v-else title="Email addresses are only available after the user logs in to the app">
+              <span class="missing" v-else title="Email addresses are only available after the user logs in and approves the email permission">
                 &mdash; email not available &mdash;
               </span>
             </div>
