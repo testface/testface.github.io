@@ -95,7 +95,7 @@ h4 {
   max-width: 560px;
   margin: 120px auto;
 }
-.container form label, .container form button {
+.container form input, .container form label {
   width: 100%;
 }
 .container form input, .container form button {

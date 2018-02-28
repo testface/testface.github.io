@@ -1,293 +1,280 @@
-var userList = [];
+function DataStore(key) {
+  this.save = function(value) {
+    if(window.location.protocol == 'https:') {
+      document.cookie = key + '=' + JSON.stringify(value) + ';secure';
+    } else {
+      sessionStorage.setItem(key, JSON.stringify(value));
+    }
+  };
 
-var dialog = {
-  open: false,
-  label: null,
-  name: null,
-  value: null,
-  success: null,
-  message: null,
-  submitted: false
-};
-
-var access;
-try {
-  access = load('_app_access');
-} catch(e) {
-}
-
-if(!access) {
-  clear('_app_access');
-}
-
-if(access.token) {
-  getTestUsers();
-} else {
-  $(function() {
-    setTimeout(function() { $('input:visible')[0].focus(); });
-  });
-}
-
-var savedEmails;
-try {
-  savedEmails = load('_saved_emails');
-} catch(e) {
-}
-if(!savedEmails) {
-  savedEmails = {};
-}
-
-function save(key, value) {
-  if(window.location.protocol == 'https:') {
-    document.cookie = key + '=' + JSON.stringify(value) + ';secure';
-  } else {
-    sessionStorage.setItem(key, JSON.stringify(value));
-  }
-}
-
-function load(key) {
-  if(window.location.protocol == 'https:') {
-    var cookies = {};
-    $.each(document.cookie.split(/;\s+/), function(i, c) {
-      var j = c.indexOf('=');
-      cookies[c.substr(0, j)] = c.substr(j+1);
-    });
-    return JSON.parse(cookies[key]);
-  } else {
-    return JSON.parse(sessionStorage.getItem(key));
-  }
-}
-
-function clear(key) {
-  if(!access)
-    access = {}
-
-  access.app_name = null;
-  access.client_id = null;
-  access.client_secret = null;
-  access.token = null;
-  access.message = null;
-
-  if(window.location.protocol == 'https:') {
-    document.cookie = key + '=';
-  } else {
-    sessionStorage.setItem(key, JSON.stringify(access));
-  }
-}
-
-function onAccessFail(error) {
-  access.message = error.responseJSON.error.message;
-}
-
-function getTestUsers() {
-  $.getJSON('https://graph.facebook.com/' + access.client_id + '/accounts/test-users', {
-    access_token: access.token
-  }, function(response) {
-    getUserInfo(response.data);
-  });
-}
-
-function getUserInfo(users) {
-  var ids = $.map(users, function(u) { return u.id });
-
-  $.getJSON('https://graph.facebook.com/', {
-    access_token: access.token,
-    fields: 'name,email',
-    ids: ids.join(',')
-  }, function(response) {
-    $.each(users, function(i, user) {
-      user.name = response[user.id].name;
-      user.email = response[user.id].email;
-      userList.push(user);
-
-      if(user.email) {
-        delete savedEmails[user.id];
-        save('_saved_emails', savedEmails);
+  this.load = function() {
+    function tryLoad() {
+      if(window.location.protocol == 'https:') {
+        var cookies = {};
+        $.each(document.cookie.split(/;\s+/), function(i, c) {
+          var j = c.indexOf('=');
+          cookies[c.substr(0, j)] = c.substr(j+1);
+        });
+        return JSON.parse(cookies[key]);
       } else {
-        user.email = savedEmails[user.id];
+        return JSON.parse(sessionStorage.getItem(key));
       }
-    });
-  });
-}
-
-function getToken() {
-  access.message = '';
-
-  $.getJSON('https://graph.facebook.com/oauth/access_token', {
-    client_id: this.access.client_id,
-    client_secret: this.access.client_secret,
-    grant_type: 'client_credentials'
-  }).done(function(response) {
-    getAppInfo(response.access_token);
-  }).fail(onAccessFail);
-}
-
-function getAppInfo(token) {
-  $.getJSON('https://graph.facebook.com/' + access.client_id, {
-    access_token: token
-  }).done(function(response) {
-    access.app_name = response.name;
-    access.token = token;
-    save('_app_access', access);
-    getTestUsers();
-  }).fail(onAccessFail);
-}
-
-function confirmDialog(props, cb) {
-  dialog.open = true;
-  dialog.title = props.title;
-  dialog.label = props.label;
-  dialog.name = props.name;
-  dialog.value = '';
-  dialog.cb = cb;
-
-  $('body').css('overflow', 'hidden');
-
-  setTimeout(function() {
-    $('.dialog input:visible').focus();
-  });
-}
-
-function closeDialog() {
-  dialog.open = false;
-  dialog.success = null;
-  dialog.message = null;
-  dialog.name = null;
-  dialog.submitted = false;
-  dialog.cb = null;
-
-  $('body').css('overflow', 'auto');
-}
-
-function setPassword(user, password) {
-  dialog.submitted = true;
-  $.ajax({
-    method: 'POST',
-    url: 'https://graph.facebook.com/' + user.id,
-    data: {
-      password: password,
-      access_token: access.token
-    }
-  }).done(function(response) {
-    if(response.success) {
-      dialog.success = 'Password updated';
-    }
-  }).fail(function(response) {
-    dialog.message = response.responseJSON.error.message;
-  }).always(function() {
-    dialog.submitted = false;
-  });
-}
-
-function deleteUser(user) {
-  dialog.submitted = true;
-  $.ajax({
-    method: 'DELETE',
-    url: 'https://graph.facebook.com/' + user.id,
-    data: {
-      access_token: access.token
-    }
-  }).done(function(response) {
-    if(response.success) {
-      dialog.success = 'User deleted';
-
-      var i = userList.findIndex(function(u) {
-        return u.id == user.id;
-      });
-
-      userList.splice(i, 1);
-    }
-  }).fail(function(response) {
-    dialog.message = response.responseJSON.error.message;
-  }).always(function() {
-    dialog.submitted = false;
-  });
-}
-
-function addUser(name) {
-  dialog.submitted = true;
-  $.ajax({
-    method: 'POST',
-    url: 'https://graph.facebook.com/' + access.client_id + '/accounts/test-users', 
-    data: {
-      access_token: access.token,
-      name: name,
-      permissions: 'email'
-    }
-  }).done(function(response) {
-    var user = response;
-    user.name = name;
-
-    if(!name) {
-      $.getJSON('https://graph.facebook.com/' + user.id, {
-        access_token: access.token
-      }, function(response) {
-        user.name = response.name;
-      });
     }
 
-    dialog.value = user.password;
-    dialog.label = 'Change the default password';
-    dialog.name = 'New password';
-    dialog.cb = function() {
-      if(dialog.value == user.password || !dialog.value) {
-        dialog.success = 'Kept default password';
-      } else {
-        setPassword(user, dialog.value);
-      }
-    };
+    var value;
+    try { 
+      value = tryLoad();
+    } catch(e) {}
 
-    userList.push(user);
+    return value || {};
+  };
 
-    savedEmails[user.id] = user.email;
-    save('_saved_emails', savedEmails);
-
-    setTimeout(function() {
-      $('.dialog input:visible').select();
-    });
-
-  }).fail(function(response) {
-    dialog.message = response.responseJSON.error.message;
-    dialog.submitted = false;
-  }).always(function() {
-    dialog.submitted = false;
-  });
+  this.clear = function() {
+    if(window.location.protocol == 'https:') {
+      document.cookie = key + '=';
+    } else {
+      sessionStorage.removeItem(key);
+    }
+  };
 }
 
 new Vue({
   el: '#app',
   data: {
-    access: access,
-    users: userList,
-    dialog: dialog
+    access: { message: null },
+    users: [],
+    dialog: { open: null, message: null, submitted: null, success: null }
+  },
+  created: function() {
+    this.accessStore = new DataStore('_app_access');
+    this.emailStore  = new DataStore('_saved_emails');
+
+    Object.assign(this.access, this.accessStore.load());
+    this.savedEmails = this.emailStore.load();
+
+    if(this.access.token) {
+      this.getTestUsers();
+    } else {
+      $(function() {
+        setTimeout(function() { $('input:visible')[0].focus(); });
+      });
+    }
   },
   methods: {
-    authorize: getToken,
+    authorize: function() {
+      this.access.message = '';
+
+      $.ajax({
+        url: 'https://graph.facebook.com/oauth/access_token',
+        data: {
+          client_id: this.access.client_id,
+          client_secret: this.access.client_secret,
+          grant_type: 'client_credentials'
+        },
+        context: this
+      }).done(function(response) {
+        this.getAppInfo(response.access_token);
+      }).fail(this.onAccessFail);
+    },
+
     disconnect: function() {
-      confirmDialog({title: 'Disconnect', label: "Really sign out?"}, function() {
-        clear('_app_access')
-        userList = [];
-        closeDialog();
+      this.confirmDialog({title: 'Disconnect', label: "Really sign out?"}, function() {
+        this.accessStore.clear();
+        this.access = {};
+        this.users.splice(0, this.users.length);
+        this.close();
       });
     },
     select: function(e) {
       e.target.select();
     },
     unlock: function(user) {
-      confirmDialog({title: "Set Password", label: "Password for " + user.name, name: 'New password' }, function() { setPassword(user, dialog.value) });
+      this.confirmDialog({title: "Set Password", label: "Password for " + user.name, name: 'New password' }, function() { this.setPassword(user) });
     },
     remove: function(user) {
-      confirmDialog({title: "Delete User", label: "Really delete " + user.name + "?" }, function() { deleteUser(user) });
+      this.confirmDialog({title: "Delete User", label: "Really delete " + user.name + "?" }, function() { this.deleteUser(user) });
     },
     add: function() {
-      confirmDialog({title: "Create User", label: "Pick a name for the test user", name: 'Name' }, function() { addUser(dialog.value) });
+      this.confirmDialog({title: "Create User", label: "Pick a name for the test user", name: 'Name' }, function() { this.addUser() });
     },
     close: function() {
-      closeDialog();
+      $.each(this.dialog, function(key, value) {
+        this.dialog[key] = null;
+      }.bind(this));
+
+      $('body').css('overflow', 'auto');
     },
     accept: function() {
-      dialog.cb();
-    }
+      this.dialog.cb.bind(this)();
+    },
+
+    onAccessFail: function(error) {
+      this.access.message = error.responseJSON.error.message;
+    },
+
+    getAppInfo: function(token) {
+      $.ajax({
+        url: 'https://graph.facebook.com/' + this.access.client_id,
+        data: {
+          access_token: token
+        },
+        context: this
+      }).done(function(response) {
+        Object.assign(this.access, { app_name: response.name, token: token });
+        this.accessStore.save(this.access);
+        this.getTestUsers();
+      }).fail(this.onAccessFail);
+    },
+
+
+    getTestUsers: function() {
+      $.ajax({
+        url: 'https://graph.facebook.com/' + this.access.client_id + '/accounts/test-users', 
+        data: {
+          access_token: this.access.token
+        },
+        context: this
+      }).done(function(response) {
+        this.getUserInfo(response.data);
+      });
+    },
+    getUserInfo: function(users) {
+      var ids = $.map(users, function(u) { return u.id });
+
+      $.ajax({
+        url: 'https://graph.facebook.com/',
+        data: {
+          access_token: this.access.token,
+          fields: 'name,email',
+          ids: ids.join(',')
+        },
+        context: this
+      }).done(function(response) {
+
+        $.each(users, function(i, user) {
+          Object.assign(user, response[user.id]);
+
+          this.users.push(user);
+
+          if(user.email) {
+            delete this.savedEmails[user.id];
+            this.emailStore.save(this.savedEmails);
+          } else {
+            user.email = this.savedEmails[user.id];
+          }
+        }.bind(this));
+      });
+    },
+
+    setPassword: function(user) {
+      this.dialog.submitted = true;
+      $.ajax({
+        method: 'POST',
+        url: 'https://graph.facebook.com/' + user.id,
+        data: {
+          password: this.dialog.value,
+          access_token: this.access.token
+        },
+        context: this
+      }).done(function(response) {
+        if(response.success) {
+          this.dialog.success = 'Password updated';
+        }
+      }).fail(function(response) {
+        this.dialog.message = response.responseJSON.error.message;
+      }).always(function() {
+        this.dialog.submitted = false;
+      });
+    },
+
+    addUser: function() {
+      this.dialog.submitted = true;
+      $.ajax({
+        method: 'POST',
+        url: 'https://graph.facebook.com/' + this.access.client_id + '/accounts/test-users', 
+        data: {
+          access_token: this.access.token,
+          name: this.dialog.value,
+          permissions: 'email'
+        },
+        context: this
+      }).done(function(response) {
+        var user = response;
+        user.name = this.dialog.value;
+
+        if(!this.dialog.value) {
+          $.getJSON('https://graph.facebook.com/' + user.id, {
+            access_token: this.access.token
+          }, function(response) {
+            user.name = response.name;
+          });
+        }
+
+        Object.assign(this.dialog, {
+          label: 'Change the default password',
+          name: 'New password',
+          value: user.password, 
+          cb: function() {
+            if(this.dialog.value == user.password || !this.dialog.value) {
+              this.dialog.success = 'Kept default password';
+            } else {
+              this.setPassword(user);
+            }
+          }
+        });
+
+        this.users.push(user);
+
+        this.savedEmails[user.id] = user.email;
+        this.emailStore.save(this.savedEmails);
+
+        setTimeout(function() {
+          $('.dialog input:visible').select();
+        });
+
+      }).fail(function(response) {
+        Object.assign(this.dialog, { message: response.responseJSON.error.message, submitted: null });
+      }).always(function() {
+        this.dialog.submitted = null;
+      });
+    },
+
+    deleteUser: function(user) {
+      this.dialog.submitted = true;
+      $.ajax({
+        method: 'DELETE',
+        url: 'https://graph.facebook.com/' + user.id,
+        data: {
+          access_token: this.access.token
+        },
+        context: this
+      }).done(function(response) {
+        if(response.success) {
+          this.dialog.success = 'User deleted';
+
+          var i = this.users.findIndex(function(u) {
+            return u.id == user.id;
+          });
+
+          this.users.splice(i, 1);
+        }
+      }).fail(function(response) {
+        this.dialog.message = response.responseJSON.error.message;
+      }).always(function() {
+        this.dialog.submitted = false;
+      });
+    },
+
+    confirmDialog: function(props, cb) {
+      Object.assign(this.dialog, { open: true, cb: cb, value: '' }, props);
+
+      $('body').css('overflow', 'hidden');
+
+      setTimeout(function() {
+        $('.dialog input:visible').focus();
+      });
+    },
+
   }
 });
 
