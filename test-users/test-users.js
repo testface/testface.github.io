@@ -258,7 +258,8 @@ new Vue({
   el: '#app',
   data: {
     access: access,
-    users: userList
+    users: userList,
+    dialog: dialog
   },
   methods: {
     authorize: getToken,
@@ -280,21 +281,13 @@ new Vue({
     },
     add: function() {
       confirmDialog({title: "Create User", label: "Pick a name for the test user", name: 'Name' }, function() { addUser(dialog.value) });
-    }
-  }
-});
-
-new Vue({
-  el: '#overlay',
-  data: {
-    dialog: dialog
-  },
-  methods: {
+    },
     close: function() {
       closeDialog();
     },
-    yes: function() {
+    accept: function() {
       dialog.cb();
     }
   }
 });
+

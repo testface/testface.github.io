@@ -8,118 +8,121 @@
     <link rel='icon' href='../favicon.ico'>
   </head>
   <body>
-    <div class="container" id="app">
-      <h1>
-        <a href="..">Test ;\ Face</a>
-        <span class="app"> Test Users </span>
-      </h1>
-      <template v-if="access.token">
-        <div class="app-info">
-          <h4> {{ access.app_name }} </h4>
-          <button class="disconnect" v-on:click="disconnect">
-            Sign Out
-            <i class="fa fa-sign-out"></i>
-          </button>
-        </div>
-        <ul>
-          <li class="header">
-            <div class="name"> Name </div>
-            <div class="email"> Email </div>
-            <div class="actions"> Actions </div>
-          </li>
-          <li v-for="user in users">
-            <div class="name"> {{ user.name }} </div>
-            <div class="email">
-              <input readonly v-if="user.email" v-on:click="select" v-model="user.email"></input>
-              <span class="missing" v-else title="Email addresses are only available after the user logs in and approves the email permission">
-                &mdash; email not available &mdash;
-              </span>
-            </div>
+    <div class="app" id="app" v-cloak>
+
+      <div class="container" id="app">
+        <h1>
+          <a href="..">Test ;\ Face</a>
+          <span class="app"> Test Users </span>
+        </h1>
+        <template v-if="access.token">
+          <div class="app-info">
+            <h4> {{ access.app_name }} </h4>
+            <button class="disconnect" v-on:click="disconnect">
+              Sign Out
+              <i class="fa fa-sign-out"></i>
+            </button>
+          </div>
+          <ul>
+            <li class="header">
+              <div class="name"> Name </div>
+              <div class="email"> Email </div>
+              <div class="actions"> Actions </div>
+            </li>
+            <li v-for="user in users">
+              <div class="name"> {{ user.name }} </div>
+              <div class="email">
+                <input readonly v-if="user.email" v-on:click="select" v-model="user.email"></input>
+                <span class="missing" v-else title="Email addresses are only available after the user logs in and approves the email permission">
+                  &mdash; email not available &mdash;
+                </span>
+              </div>
+              <div class="actions">
+                <button class="unlock" title="Set password" v-on:click="unlock(user)"><i class="fa fa-unlock-alt"></i></button>
+                <button class="delete" title="Delete" v-on:click="remove(user)"><i class="fa fa-trash"></i></button>
+              </div>
+            </li>
+          </ul>
+
+          <div class="new-user">
             <div class="actions">
-              <button class="unlock" title="Set password" v-on:click="unlock(user)"><i class="fa fa-unlock-alt"></i></button>
-              <button class="delete" title="Delete" v-on:click="remove(user)"><i class="fa fa-trash"></i></button>
+              <div class="button-wrapper">
+                <button class="add" title="Add user" v-on:click="add"><i class="fa fa-user-plus"></i></button>
+              </div>
             </div>
-          </li>
-        </ul>
-
-        <div class="new-user">
-          <div class="actions">
-            <div class="button-wrapper">
-              <button class="add" title="Add user" v-on:click="add"><i class="fa fa-user-plus"></i></button>
-            </div>
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <form v-on:submit.prevent="authorize">
-          <h4> Facebook App Info: </h4>
-          <div>
-            <label>Client ID</label>
-            <input type="text" v-model="access.client_id"></input>
-          </div>
-          <div>
-            <label>Client Secret</label>
-            <input type="password" v-model="access.client_secret"></input>
-          </div>
-          <div class="error-message" v-if="access.message">
-            {{ access.message }}
-          </div>
-          <div>
-            <button>Authorize</button>
-          </div>
-
-          <div class="info">
-            <p> Security note: </p>
-            <p> <small> Your Facebook app credentials will be converted into a Facebook app token,
-              which will in turn be used to make calls on behalf of the app using the Graph API. </small> </p>
-            <p> <small> All API calls are made in-browser with ajax, and are not sent anywhere other than directly to
-              Facebook. </small> </p>
-            <p> <small> Certain data, including the app token, are saved in cookie specific to the subdomain with
-              the secure flag set. </small> </p>
-          </div>
-
-        </form>
-      </template>
-    </div>
-    <div class="overlay" id="overlay" v-cloak v-on:click="close" v-show="dialog.open">
-      <div class="dialog" v-on:click.stop>
-        <div class="title">
-          <h4> {{ dialog.title }} </h4>
-          <button v-on:click="close"><i class="fa fa-close"></i></button>
-        </div>
-
-        <div class="label">
-          {{ dialog.label }}
-        </div>
-
-        <template v-if="dialog.success">
-          <div class="success">
-            <i class="fa fa-check"></i>
-            {{ dialog.success }}
-
-            <ul>
-              <li v-for="step in dialog.steps">
-                {{ step }}
-              </li>
-            </ul>
           </div>
         </template>
         <template v-else>
-          <form v-on:submit.prevent="yes">
-            <div class="input" v-if="dialog.name">
-              <input v-bind:type="dialog.type" v-model="dialog.value" v-bind:placeholder="dialog.name"></input>
+          <form v-on:submit.prevent="authorize">
+            <h4> Facebook App Info: </h4>
+            <div>
+              <label>Client ID</label>
+              <input type="text" v-model="access.client_id"></input>
+            </div>
+            <div>
+              <label>Client Secret</label>
+              <input type="password" v-model="access.client_secret"></input>
+            </div>
+            <div class="error-message" v-if="access.message">
+              {{ access.message }}
+            </div>
+            <div>
+              <button>Authorize</button>
             </div>
 
-            <div class="error-message" v-if="dialog.message">
-              {{ dialog.message }}
+            <div class="info">
+              <p> Security note: </p>
+              <p> <small> Your Facebook app credentials will be converted into a Facebook app token,
+                which will in turn be used to make calls on behalf of the app using the Graph API. </small> </p>
+              <p> <small> All API calls are made in-browser with ajax, and are not sent anywhere other than directly to
+                Facebook. </small> </p>
+              <p> <small> Certain data, including the app token, are saved in cookie specific to the subdomain with
+                the secure flag set. </small> </p>
             </div>
 
-            <div class="confirm">
-              <button v-bind:disabled="dialog.submitted"><i class="fa fa-check"></i> Continue</button>
-            </div>
           </form>
         </template>
+      </div>
+      <div class="overlay" v-on:click="close" v-show="dialog.open">
+        <div class="dialog" v-on:click.stop>
+          <div class="title">
+            <h4> {{ dialog.title }} </h4>
+            <button v-on:click="close"><i class="fa fa-close"></i></button>
+          </div>
 
+          <div class="label">
+            {{ dialog.label }}
+          </div>
+
+          <template v-if="dialog.success">
+            <div class="success">
+              <i class="fa fa-check"></i>
+              {{ dialog.success }}
+
+              <ul>
+                <li v-for="step in dialog.steps">
+                  {{ step }}
+                </li>
+              </ul>
+            </div>
+          </template>
+          <template v-else>
+            <form v-on:submit.prevent="accept">
+              <div class="input" v-if="dialog.name">
+                <input v-bind:type="dialog.type" v-model="dialog.value" v-bind:placeholder="dialog.name"></input>
+              </div>
+
+              <div class="error-message" v-if="dialog.message">
+                {{ dialog.message }}
+              </div>
+
+              <div class="confirm">
+                <button v-bind:disabled="dialog.submitted"><i class="fa fa-check"></i> Continue</button>
+              </div>
+            </form>
+          </template>
+
+        </div>
       </div>
     </div>
 
