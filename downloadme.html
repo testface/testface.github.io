@@ -1,0 +1,38 @@
+<html>
+
+  <head>
+    <title> Download Me </title>
+
+    <style type="text/css">
+      body { margin: 0; }
+      .container {
+        max-width: 200px;
+        margin: 100px auto;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <h1> Download Me </h1>
+
+      <a download href="http://749downloadcontentbutton.pr.kj/PRINCIPLES-SXSW.mp4">HERE</a>
+    </div>
+
+    <script type="text/javascript">
+      var a = document.querySelector('a[download]');
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        var t = document.createElement('a');
+        t.href = a.href;
+        t.download = 'FILENAME.mp4';
+        t.click();
+
+      });
+    </script>
+
+  </body>
+
+</html>
