@@ -1,0 +1,80 @@
+<html>
+
+  <head>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title> Expire Me </title>
+    <style type="text/css">
+      body {
+        margin: 0;
+        font-family: 'sans';
+        background: #eee;
+      }
+      .container {
+        padding: 60px 0;
+        margin: 0 auto;
+        max-width: 300px;
+        height: 100%;
+        min-height: 100vh;
+        box-shadow: 0 0 12px 4px #ddd;
+        background: white;
+      }
+      h1, h2 {
+        text-align: center;
+      }
+      h1 {
+        margin: 40px 0;
+        font-size: 32px;
+      }
+
+      .content {
+        margin: 100px 16px;
+      }
+      .content:not([show]) {
+        display: none;
+      }
+
+      [name="limited-time"] {
+        color: navy;
+      }
+
+      [name="expired"] {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2> Super Content </h2>
+
+      <div class="content" name="limited-time">
+        <h1> Luck You! </h1>
+        <p> This is both exclusive and viral </p>
+      </div>
+      <div class="content" name="expired">
+        <h1> We're Sorry! </h1>
+        <p> The content you're looking for has expired </p>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      var now = new Date();
+      var expireAt = new Date("2018/3/8 00:00 PST");
+
+      var i = location.search.indexOf('expire=');
+      if(i > -1) {
+        expireAt = new Date(decodeURIComponent(location.search.substr(i + 7).split('&')[0]));
+      }
+
+      if(now < expireAt) {
+        document.querySelector('[name="limited-time"]').setAttribute('show', true);
+      } else {
+        document.querySelector('[name="expired"]').setAttribute('show', true);
+      }
+
+    </script>
+
+  </body>
+
+</head>
