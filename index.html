@@ -79,6 +79,29 @@
         width: 144px;
         height: 144px;
       }
+
+      .social-sharing  {
+        position: relative;
+        left: calc(40% - 160px);
+        width: 160px;
+      }
+      .social-sharing .link  {
+        padding: 8px;
+        border: 2px solid #449955;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 20px;
+      }
+      .social-sharing .link .inner {
+        color: white;
+        background-color: #449955;
+        font-size: 24px;
+        line-height: 120px;
+        text-align: center;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+      }
     </style>
   </head>
   <body>
@@ -94,6 +117,16 @@
         </a>
         <div class="info">
           Manage test users for a Facebook app.
+        </div>
+      </div>
+      <div class='app social-sharing'>
+        <a class="link" href='social-sharing'>
+          <div class="inner">
+            Social Sharing
+          </div>
+        </a>
+        <div class="info">
+          Demo of social sharing
         </div>
       </div>
     </div>

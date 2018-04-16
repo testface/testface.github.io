@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>TestFace | Social </title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link href='https://fonts.googleapis.com/css?family=Baumans|Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+    <link rel='icon' href='favicon.ico'>
+
+    <style>
+      body { font-family: 'Open Sans'; }
+      a { text-decoration: none; color: black; }
+      html, body {
+        margin: 0;
+      }
+      * {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      }
+      .title {
+        font-family: 'Baumans';
+        font-size: 2.2em;
+        font-weight: bold;
+        color: #444;
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 60px 0 20px;
+      }
+      .content {
+        width: 100%;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 0;
+        box-sizing: border-box;
+        position: relative;
+      }
+      .item {
+        padding: 20px 40px;
+        border: 2px solid green;
+        border-radius: 8px;
+        margin: 12px 0;
+        background: #fafafa;
+      }
+      .item.active {
+        background: white;
+        border: 2px solid lime;
+      }
+    </style>
+  </head>
+  <body>
+    <div class='title'>
+      Social
+    </div>
+    <div class='content'>
+      <div class="item" data-item="1">
+        <button data-choose="1"> One </button>
+      </div>
+      <div class="item" data-item="2">
+        <button data-choose="2"> One </button>
+      </div>
+      <div class="item" data-item="3">
+        <button data-choose="3"> Three </button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      (function() {
+        var item;
+        var p = location.search.indexOf('item=');
+        if(p > -1) {
+          item = location.search.substr(p + 5, 1);
+          document.querySelector('[data-item="' + item + '"]').classList.add('active');
+        } else {
+          document.querySelector('[data-item]').classList.add('active');
+        }
+      })();
+    </script>
+  </body>
+</html>
+
