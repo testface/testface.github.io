@@ -17,7 +17,7 @@
           }
         }
       }.bind(this);
-      http.open('GET', 'articles.json?t=' + new Date().getTime());
+      http.open('GET', 'list-of-articles.json?t=' + new Date().getTime());
       http.send();
     },
     template: '\
