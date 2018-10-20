@@ -1,10 +1,9 @@
 (function() {
-
-  new Vue({
-    el: '#articles',
-    data: {
-      articles: [],
-      foo: ''
+  Vue.component('article-list', {
+    data: function() {
+      return {
+        articles: []
+      }
     },
     created: function() {
       var http = new XMLHttpRequest;
@@ -20,7 +19,11 @@
       }.bind(this);
       http.open('GET', 'articles.json?t=' + new Date().getTime());
       http.send();
-    }
-  })
-
+    },
+    template: '\
+      <div class="article-list"> \
+        <article-summary v-for="article in articles" v-bind:article="article"></article-summary> \
+      </div> \
+      '
+  });
 })();

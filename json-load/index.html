@@ -12,14 +12,21 @@
       <h1> JSON Load </h1>
 
       <div id='articles'>
-        <article-summary v-for="article in articles" v-bind:article="article"></article-summary>
+        <article-list> </article-list>
         <video-modal> </video-modal>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+
+    <script src="article-list.js"></script>
     <script src="article-summary.js"></script>
     <script src="video-modal.js"></script>
-    <script src="data-model.js"></script>
+
+    <script type="text/javascript">
+      (function() {
+        new Vue({ el: '#articles' });
+      })();
+    </script>
   </body>
 </html>
