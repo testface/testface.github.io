@@ -92,9 +92,8 @@ h1 {
 }
 .overlay .modal {
   width: 100%;
-  max-width: 1980px;
   height: 0;
-  padding-top: 56.25%;
+  padding-top: calc(100% / 16 * 9);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -102,10 +101,23 @@ h1 {
   background: black;
 }
 
+@media screen and (orientation: landscape) {
+  .overlay .modal {
+    width: calc(100vh / 9 * 16);
+    max-width: 100%;
+   }
+}
+
+@media screen and (min-width: 1980px) {
+  .overlay .modal {
+    max-width: 1980px;
+  }
+}
+
 .overlay button {
   position: absolute;
-  right: -5px;
-  top: -30px;
+  right: 2px;
+  top: 2px;
   background: none;
   border: 0;
   color: white;
@@ -115,21 +127,6 @@ h1 {
   padding: 16px;
   border-radius: 50%;
 }
-@media screen and (min-width: 768px) {
-  .overlay button {
-    right: -10px;
-    top: -10px;
-  }
-}
-
-@media screen and (orientation: landscape) {
-  .overlay .modal {
-    width: calc(100vh / 9 * 16 - 40px);
-   }
-  .overlay button {
-    top: 20px;
-  }
-}
 
 .overlay iframe {
   position: absolute;
@@ -138,4 +135,6 @@ h1 {
   width: 100%;
   height: 100%;
   border: 0;
+  box-sizing: border-box;
+  padding: 40px;
 }
