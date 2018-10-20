@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>TestFace | JSON Load</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link href='https://fonts.googleapis.com/css?family=Baumans|Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="json-load.css" rel="stylesheet">
+    <link rel='icon' href='../favicon.ico'>
+  </head>
+  <body>
+    <div class="container">
+      <h1> JSON Load </h1>
+
+      <div id='articles'>
+        <article-summary v-for="article in articles" v-bind:article="article"></article-summary>
+        <video-modal> </video-modal>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="json-load.js"></script>
+  </body>
+</html>

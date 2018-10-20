@@ -1,0 +1,23 @@
+{"articles": [
+  {
+    "title": "Refinance Now",
+    "date": "April 2005",
+    "description": "Homeowners in Missouri are saving thousands with this one weird trick.",
+    "thumbnail": "https://www.thebalance.com/thmb/QA4rwMK_pwHErZ3uXR0sFTWvnGk=/300x200/filters:saturation(0.2):brightness(10):contrast(5):no_upscale()/GettyImages-155421401-577083623df78cb62cb5c31b.jpg",
+    "url": "https://xkcd.com/1674/"
+  },
+  {
+    "title": "New Malware Discovered",
+    "date": "December 2017",
+    "description": "It may already be too late to protect your personal data from this Russian bot.",
+    "thumbnail": "https://enterprise.comodo.com/images/how-to-get-rid-of-malware.png",
+    "url": "https://xkcd.com/1247/"
+  },
+  {
+    "title": "Nevery say Die",
+    "date": "September 2011",
+    "description": "It's amazing how much abuse a well-built washing machine can withstand",
+    "thumbnail": "https://img.zap.co.il/pics/2/3/8/5/40315832c.gif",
+    "youtube_id": "6_PLnInsh7E"
+  }
+]}

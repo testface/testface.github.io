@@ -102,6 +102,29 @@
         width: 120px;
         height: 120px;
       }
+
+      .json-load  {
+        position: relative;
+        left: calc(60% - 200px);
+        width: 200px;
+      }
+      .json-load .link  {
+        padding: 8px;
+        border: 2px solid darkgoldenrod;
+        border-radius: 50%;
+        display: inline-block;
+        margin: 20px;
+      }
+      .json-load .link .inner {
+        color: white;
+        background-color: darkgoldenrod;
+        font-size: 24px;
+        line-height: 150px;
+        text-align: center;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+      }
     </style>
   </head>
   <body>
@@ -127,6 +150,16 @@
         </a>
         <div class="info">
           Demo of social sharing
+        </div>
+      </div>
+      <div class='app json-load'>
+        <a class="link" href='json-load'>
+          <div class="inner">
+            JSON Load
+          </div>
+        </a>
+        <div class="info">
+          Demo of loading semi-dynamic content
         </div>
       </div>
     </div>
