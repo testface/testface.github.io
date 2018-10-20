@@ -19,7 +19,7 @@
       }
     },
     template: '\
-      <div class="overlay" v-show="video_url" v-on:click="hide()"> \
+      <div class="overlay" v-if="video_url" v-on:click="hide()"> \
         <div class="modal"> \
           <iframe :src="video_url" allow="autoplay; encrypted-media" allowfullscreen></iframe> \
           <button v-on:click="hide()"> <i class="fa fa-times"></i> </button> \
